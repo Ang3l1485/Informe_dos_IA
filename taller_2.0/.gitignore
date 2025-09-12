@@ -1,0 +1,23 @@
+# .gitignore (crea este archivo)
+# Entorno y cache
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Datos y binarios grandes
+data/
+Libros/
+*.pdf
+*.zip
+*.csv
+*.parquet
+*.pkl
+*.h5
+*.mp4
+*.avi
+
+# IDE/OS
+.vscode/
+.idea/
+.DS_Store
