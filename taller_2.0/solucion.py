@@ -1,4 +1,3 @@
-
 # Proyecto Actividad 2 - Machine Learning Supervisado
 
 import os
@@ -6,9 +5,10 @@ import glob
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 import kagglehub
-
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Input
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
@@ -19,7 +19,7 @@ from sklearn.metrics import (
 )
 from sklearn.ensemble import RandomForestClassifier
 
-
+tf.random.set_seed(53)
 # -------------------------------
 # 1) Descargar y cargar dataset
 # -------------------------------
@@ -27,7 +27,6 @@ print("Descargando dataset de Kaggle (o usando caché local)...")
 path = kagglehub.dataset_download("fedesoriano/heart-failure-prediction")
 print("Ruta del dataset:", path)
 
-# Buscar el archivo CSV dentro del dataset
 csv_candidates = [
     os.path.join(path, "heart.csv"),
     os.path.join(path, "Heart.csv"),
@@ -41,8 +40,6 @@ else:
     data_path = next(p for p in csv_candidates if os.path.exists(p))
 
 print("Archivo usado:", data_path)
-
-# Leer dataset
 df = pd.read_csv(data_path)
 
 print("\n--- Descripción inicial del dataset ---")
@@ -59,7 +56,6 @@ target = "HeartDisease"
 X = df.drop(columns=[target])
 y = df[target].astype(int)
 
-# Separar categóricas y numéricas
 categorical_features = X.select_dtypes(include=["object"]).columns.tolist()
 numerical_features = X.select_dtypes(include=[np.number]).columns.tolist()
 
@@ -104,41 +100,75 @@ rf_pipeline = Pipeline(
 )
 
 rf_pipeline.fit(X_train, y_train)
-y_pred = rf_pipeline.predict(X_test)
+y_pred_rf = rf_pipeline.predict(X_test)
 
 # -------------------------------
-# 6) Evaluación
+# 6) Evaluación Random Forest
 # -------------------------------
-acc = accuracy_score(y_test, y_pred)
-prec = precision_score(y_test, y_pred, zero_division=0)
-rec = recall_score(y_test, y_pred, zero_division=0)
-f1 = f1_score(y_test, y_pred, zero_division=0)
+acc_rf = accuracy_score(y_test, y_pred_rf)
+prec_rf = precision_score(y_test, y_pred_rf, zero_division=0)
+rec_rf = recall_score(y_test, y_pred_rf, zero_division=0)
+f1_rf = f1_score(y_test, y_pred_rf, zero_division=0)
 
 print("\n--- Resultados Random Forest ---")
-print(f"Accuracy : {acc:.4f}")
-print(f"Precision: {prec:.4f}")
-print(f"Recall   : {rec:.4f}")
-print(f"F1-score : {f1:.4f}")
+print(f"Accuracy : {acc_rf:.4f}")
+print(f"Precision: {prec_rf:.4f}")
+print(f"Recall   : {rec_rf:.4f}")
+print(f"F1-score : {f1_rf:.4f}")
 
 print("\nReporte de clasificación:")
-print(classification_report(y_test, y_pred, digits=4))
+print(classification_report(y_test, y_pred_rf, digits=4))
 
-# -------------------------------
-# 7) Matriz de confusión
-# -------------------------------
-cm = confusion_matrix(y_test, y_pred)
+# -----------------------------------------------
+# Implementación de la Red Neuronal
+# -----------------------------------------------
 
-plt.figure()
-plt.imshow(cm, interpolation="nearest", cmap=plt.cm.Blues)
-plt.title("Matriz de Confusión - Random Forest")
-plt.xlabel("Predicción")
-plt.ylabel("Valor real")
-plt.xticks([0, 1], ["0", "1"])
-plt.yticks([0, 1], ["0", "1"])
+X_train_processed = preprocessor.fit_transform(X_train)
+input_shape = X_train_processed.shape[1]
+print(f"\nNúmero de características tras el preprocesamiento: {input_shape}")
 
-for i in range(cm.shape[0]):
-    for j in range(cm.shape[1]):
-        plt.text(j, i, cm[i, j], ha="center", va="center", color="red")
 
-plt.tight_layout()
-plt.show()
+def create_nn_model(input_dim):
+    model = Sequential([
+        Dense(64, activation='relu', input_dim=input_dim),
+        Dense(32, activation='relu'),
+        Dense(1, activation='sigmoid')
+    ])
+
+    model.compile(optimizer='adam',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+    return model
+
+nn_model = create_nn_model(input_shape)
+nn_model.summary()
+
+print("\n--- Entrenando modelo de Red Neuronal ---")
+history = nn_model.fit(
+    X_train_processed,
+    y_train,
+    epochs=50,
+    batch_size=32,
+    validation_split=0.1,
+    verbose=0
+)
+print("Entrenamiento finalizado.")
+
+X_test_processed = preprocessor.transform(X_test)
+
+y_pred_nn_proba = nn_model.predict(X_test_processed)
+y_pred_nn = (y_pred_nn_proba > 0.5).astype("int32")
+
+acc_nn = accuracy_score(y_test, y_pred_nn)
+prec_nn = precision_score(y_test, y_pred_nn, zero_division=0)
+rec_nn = recall_score(y_test, y_pred_nn, zero_division=0)
+f1_nn = f1_score(y_test, y_pred_nn, zero_division=0)
+
+print("\n--- Resultados Red Neuronal ---")
+print(f"Accuracy : {acc_nn:.4f}")
+print(f"Precision: {prec_nn:.4f}")
+print(f"Recall   : {rec_nn:.4f}")
+print(f"F1-score : {f1_nn:.4f}")
+
+print("\nReporte de clasificación:")
+print(classification_report(y_test, y_pred_nn, digits=4))
