@@ -97,7 +97,7 @@ history = model.fit(
 
 Los resultados del modelo sobre el conjunto de prueba fueron los siguientes:
 
-![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/Soluci%C3%B3n%20forest.png?raw=true)
+![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/matriz_confusion_nn.png)
 
 Métrica	Valor
 Exactitud (Accuracy)	0.8913
