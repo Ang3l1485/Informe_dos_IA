@@ -35,6 +35,8 @@ RandomForestClassifier(
 Los resultados del modelo sobre el conjunto de prueba fueron los
 siguientes:
 
+![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/Soluci%C3%B3n%20forest.png?raw=true)
+
   Métrica                                 Valor
   --------------------------------------- ------------
   Exactitud (Accuracy)                    **0.9022**
@@ -99,7 +101,7 @@ GradientBoostingClassifier(
 ## Resultados iniciales
 Resultados obtenidos con `n_estimators=300`, `learning_rate=0.05`, `max_depth=3`:
 
-📊 *[Aquí va la URL de la imagen de la matriz de confusión inicial]*
+![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/propuesta_1.png)
 
 ---
 
@@ -120,7 +122,7 @@ GradientBoostingClassifier(
 ---
 
 ## Resultados finales
-📊 *[Aquí va la URL de la imagen de la matriz de confusión final]*
+![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/Solucion_ideal.png)
 
 | Métrica              | Valor   |
 |----------------------|---------|
