@@ -6,7 +6,6 @@ import glob
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 import kagglehub
 
 from sklearn.model_selection import train_test_split
@@ -98,7 +97,11 @@ rf_pipeline = Pipeline(
         ("classifier", RandomForestClassifier(
             n_estimators=200,
             random_state=42,
-            n_jobs=-1
+            n_jobs=-1,
+            criterion="gini",
+            max_features='sqrt',
+
+            
         )),
     ]
 )
