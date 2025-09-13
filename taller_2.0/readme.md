@@ -99,11 +99,14 @@ Los resultados del modelo sobre el conjunto de prueba fueron los siguientes:
 
 ![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/matriz_confusion_nn.png)
 
-Métrica	Valor
-Exactitud (Accuracy)	0.8913
-Precisión (Precision)	0.8942
-Sensibilidad (Recall)	0.9118
-Puntaje F1 (F1-score)	0.9029
+| Métrica              | Valor   |
+|----------------------|---------|
+| **Exactitud (Accuracy)** | 0.8913 |
+| **Precisión (Precision)** | 0.8942 |
+| **Sensibilidad (Recall)** | 0.9118 |
+| **F1-score**            | 0.9029 |
+
+---
 
 
 
