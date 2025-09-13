@@ -177,6 +177,38 @@ print(f"F1-score : {f1_nn:.4f}")
 print("\nReporte de clasificación:")
 print(classification_report(y_test, y_pred_nn, digits=4))
 
+# Generamos la matriz de confusión para el modelo de Red Neuronal
+cm_nn = confusion_matrix(y_test, y_pred_nn)
+
+# Creamos la figura y los ejes para la gráfica
+fig, ax = plt.subplots()
+
+# Visualización de la matriz
+im = ax.imshow(cm_nn, interpolation="nearest", cmap=plt.cm.Blues) # Usamos otro color para diferenciar
+ax.set_title("Matriz de Confusión - Red Neuronal") # Título corregido
+
+# Añadir barra de color
+fig.colorbar(im, ax=ax)
+
+# Configurar ejes
+ax.set_xlabel("Predicción")
+ax.set_ylabel("Valor real")
+ax.set_xticks([0, 1])
+ax.set_yticks([0, 1])
+ax.set_xticklabels(["Sin Enfermedad (0)", "Con Enfermedad (1)"])
+ax.set_yticklabels(["Sin Enfermedad (0)", "Con Enfermedad (1)"])
+
+# Añadir los números dentro de cada celda
+for i in range(cm_nn.shape[0]):
+    for j in range(cm_nn.shape[1]):
+        # Cambiamos el color del texto si el fondo es muy oscuro
+        color = "white" if cm_nn[i, j] > (cm_nn.max() / 2) else "black"
+        ax.text(j, i, f'{cm_nn[i, j]}', ha="center", va="center", color=color)
+
+# Guardar la figura en un archivo con una extensión clara (.png)
+image_path_nn = "matriz_confusion_nn.png"
+plt.savefig(image_path_nn)
+plt.close(fig)  # Cierra la figura para liberar memoria
 
 # -------------------------------
 #  Entrenamiento: Gradient Boosting (modelo investigado)

@@ -57,10 +57,53 @@ siguientes:
     alcanza un **91.35%**, mostrando un desempeño consistente y
     equilibrado.
 
-## Red neuronal
+## Modelo 2: Red Neuronal
 
+Una Red Neuronal Artificial (RNA) sirve para abordar el problema de clasificación, ya que estos modelos son excelentes para aprender patrones no lineales y complejos en los datos. A diferencia de los modelos de ensamble como Random Forest y Gradient Boosting, una red neuronal opera con capas interconectadas de "neuronas". Cada neurona en una capa recibe entradas de las neuronas de la capa anterior, las procesa y transmite una salida a la siguiente capa. El modelo aprende ajustando los pesos de estas conexiones a través de un proceso de optimización llamado propagación hacia atrás (backpropagation).
 
-# la parte de mi compañero va aquí j
+La arquitectura que diseñamos es una red neuronal secuencial simple (un modelo Feed-forward) con tres capas densas:
+
+Una capa de entrada que recibe las 20 características procesadas de nuestro dataset.
+
+Una capa oculta con 64 neuronas.
+
+Una segunda capa oculta con 32 neuronas.
+
+Una capa de salida con una sola neurona para la clasificación binaria (enfermedad o no enfermedad).
+
+Utilizamos la función de activación ReLU (Rectified Linear Unit) en las capas ocultas por su eficiencia computacional. Para la capa de salida, usamos la función Sigmoide, que comprime el valor de salida entre 0 y 1, perfecto para problemas de clasificación binaria.
+
+### Arquitectura del modelo
+``` python
+model = Sequential([
+    Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    Dense(32, activation='relu'),
+    Dense(1, activation='sigmoid')
+])
+```
+
+### Parametros utilizado: 
+``` python
+history = model.fit(
+    X_train_scaled, y_train,
+    epochs=50,
+    batch_size=32,
+    validation_data=(X_test_scaled, y_test),
+    verbose=0
+)
+```
+
+### Resultados obtenidos
+
+Los resultados del modelo sobre el conjunto de prueba fueron los siguientes:
+
+![Texto alternativo](https://github.com/Ang3l1485/Informe_dos_IA/blob/main/taller_2.0/Soluci%C3%B3n%20forest.png?raw=true)
+
+Métrica	Valor
+Exactitud (Accuracy)	0.8913
+Precisión (Precision)	0.8942
+Sensibilidad (Recall)	0.9118
+Puntaje F1 (F1-score)	0.9029
 
 
 
